@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">worlde-clone</string>
+    <string name="text_title">Wordle Clone</string>
+    <string name="content_cell">Select Cell</string>
+</resources>
