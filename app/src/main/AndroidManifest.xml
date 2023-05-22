@@ -15,7 +15,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateAlwaysVisible"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

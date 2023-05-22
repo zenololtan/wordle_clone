@@ -2,4 +2,7 @@
     <string name="app_name">worlde-clone</string>
     <string name="text_title">Wordle Clone</string>
     <string name="content_cell">Select Cell</string>
+    <string name="enter_button">Enter</string>
+    <string name="reset_button">Reset</string>
+    <string name="hint_txt">Enter Guess</string>
 </resources>

@@ -5,4 +5,5 @@
     <color name="light_black">#0d0d0d</color>
     <color name="background">#e4e4e4</color>
     <color name="light_grey">#878787</color>
+    <color name="text_box">#b7b7b7</color>
 </resources>

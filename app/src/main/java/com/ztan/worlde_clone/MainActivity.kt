@@ -3,37 +3,92 @@ package com.ztan.worlde_clone
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.core.view.children
+import android.widget.Toast
+import androidx.activity.viewModels
+import com.ztan.worlde_clone.databinding.ActivityMainBinding
+import com.ztan.worlde_clone.models.State
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private val vm: MainActivityViewModel by viewModels()
     private var parentLinearLayout: LinearLayout? = null
-    private var currentRow: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        parentLinearLayout = findViewById(R.id.linear_layout)
-        addField(null)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        parentLinearLayout = binding.linearLayout
+        bindButtons()
+        updateGameStatus(vm.getState())
     }
 
-    private fun disableRow(row: RelativeLayout) {
-        for (child in row.children) {
-            child.isEnabled = false
+    private fun bindButtons() = with(binding) {
+        addButton.setOnClickListener { addField() }
+        resetButton.setOnClickListener {
+            vm.resetGame(binding.linearLayout)
+            updateGameStatus(vm.getState())
+        }
+        edt.setOnKeyListener(View.OnKeyListener{_, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                addField()
+                return@OnKeyListener true
+            }
+            false
+        })
+    }
+
+    private fun updateGameStatus(state: State) = when(state) {
+        State.WON -> {
+            binding.textStatus.text = "You Won!"
+            binding.textStatus.visibility = View.VISIBLE
+            binding.resetButton.visibility = View.VISIBLE
+            binding.textStatus.bringToFront()
+            binding.resetButton.bringToFront()
+            binding.edt.isEnabled = false
+            binding.addButton.isEnabled = false
+        }
+        State.LOST -> {
+            binding.textStatus.text = "You Lost"
+            binding.textStatus.visibility = View.VISIBLE
+            binding.resetButton.visibility = View.VISIBLE
+            binding.textStatus.bringToFront()
+            binding.resetButton.bringToFront()
+            binding.edt.isEnabled = false
+            binding.addButton.isEnabled = false
+        }
+        State.PLAYING -> {
+            binding.textStatus.visibility = View.GONE
+            binding.resetButton.visibility = View.GONE
+            binding.edt.isEnabled = true
+            binding.addButton.isEnabled = true
         }
     }
 
-    fun addField(view: View?) {
-        if (currentRow >= 5)
+    private fun validInput(str: String): Boolean {
+        if (str.isEmpty() || str.length != 5)
+            return false
+        for (letter in str) {
+            if (letter !in 'A'..'Z' && letter !in 'a'..'z')
+                return false
+        }
+        return true
+    }
+    private fun addField() {
+        val txt: String = binding.edt.text.toString().lowercase()
+        if (!validInput(txt)) {
+            Toast.makeText(this@MainActivity, "INVALID INPUT", Toast.LENGTH_SHORT).show()
             return
+        }
+        binding.edt.text.clear()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rowView: View = inflater.inflate(R.layout.word_prompt, null)
-        parentLinearLayout!!.addView(rowView, currentRow)
-        if (currentRow > 0)
-            disableRow(parentLinearLayout!!.getChildAt(currentRow - 1) as RelativeLayout)
-        currentRow++
+        val rowView: RelativeLayout = inflater.inflate(R.layout.word_line, null) as RelativeLayout
+        vm.addLine(rowView, txt)
+        parentLinearLayout!!.addView(rowView, parentLinearLayout!!.childCount)
+        updateGameStatus(vm.getState())
     }
 }

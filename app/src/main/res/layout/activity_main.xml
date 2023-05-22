@@ -35,16 +35,67 @@
         android:layout_marginBottom="10dp"
         />
 
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LMAO"
-        android:onClick="addField"
+    <EditText
+        android:id="@+id/edt"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:hint="@string/hint_txt"
+        android:maxLength="5"
+        android:gravity="center"
+        android:inputType="text"
+        android:ems="10"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:background="@color/light_grey"
+        app:layout_constraintStart_toStartOf="@id/edt"
+        app:layout_constraintEnd_toEndOf="@id/edt"
+        app:layout_constraintTop_toBottomOf="@id/edt"
+        />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_button"
+        app:layout_constraintTop_toTopOf="@id/edt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edt"
+        />
+
+    <TextView
+        android:id="@+id/text_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
+        android:textAlignment="center"
+        android:padding="18dp"
+        android:textSize="36sp"
+        android:alpha="0.8"
+        android:layout_marginBottom="300dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="You Win!"
+        />
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_button"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/text_status"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
 
     <LinearLayout
         android:id="@+id/linear_layout"
